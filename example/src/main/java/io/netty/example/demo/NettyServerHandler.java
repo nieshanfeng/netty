@@ -1,12 +1,15 @@
 package io.netty.example.demo;
 
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-public class NettyServerHandler extends ChannelInboundHandlerAdapter<String> {
+import io.netty.util.CharsetUtil;
+
+public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     // 当读取到客户端发送的消息时，会调用此方法
     @Override
-    public void channelRead(ChannelHandlerContext ctx, String msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 打印从客户端读取到的字符串消息
         System.out.println("Server received: " + msg);
        // ctx.writeAndFlush("Server received: " + msg);

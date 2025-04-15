@@ -1,3 +1,5 @@
+package io.netty.example.demo;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -13,7 +15,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     // 当通道激活时，会调用此方法
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        // 定义要发送的字符串消息
+        // 定义要发送的字符串消息=.
         String msg = "字符串消息";
         // 打印发送消息的日志信息
         System.out.println("NettyClientHandler发送数据：" + msg);
