@@ -1,5 +1,6 @@
 package io.netty.example.demo;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -11,14 +12,18 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 打印从客户端读取到的字符串消息
-        System.out.println("Server received: " + msg);
+        //System.out.println("Server received: " + msg);
        // ctx.writeAndFlush("Server received: " + msg);
+        System.out.println("开始读取数据");
+        if(msg instanceof ByteBuf){
+
+        }
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         //发送消息给客户端
-        ctx.writeAndFlush(Unpooled.copiedBuffer("服务端已收到消息", CharsetUtil.UTF_8));
+       // ctx.writeAndFlush(Unpooled.copiedBuffer("服务端已收到消息", CharsetUtil.UTF_8));
     }
 
 
