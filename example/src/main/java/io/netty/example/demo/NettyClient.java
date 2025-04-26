@@ -1,15 +1,16 @@
 package io.netty.example.demo;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+
+import java.nio.charset.Charset;
 
 
 public class NettyClient {
@@ -22,13 +23,15 @@ public class NettyClient {
             Bootstrap bootstrap = new Bootstrap();
             // 绑定事件循环组到Bootstrap
             bootstrap.group(group).channel(NioSocketChannel.class)
+                    .option(ChannelOption.SO_KEEPALIVE, true)
                     // 设置通道初始化处理器
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             // 获取通道的管道
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new StringDecoder());
+                            ch.pipeline().addLast(new DelimiterBasedFrameDecoder(Integer.MAX_VALUE, Delimiters.lineDelimiter()[0]));
+                            //pipeline.addLast(new StringDecoder());
                             // 添加字符串编码器
                             pipeline.addLast(new StringEncoder());
                             // 添加自定义的处理器
@@ -40,6 +43,13 @@ public class NettyClient {
             System.out.println("netty client start。。");
             // 连接到服务器，同步等待成功，即启动客户端
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8080).sync();
+
+            String person="张三\r\n";
+
+            channelFuture.channel().write(person);
+            channelFuture.channel().write(person);
+            channelFuture.channel().writeAndFlush(Delimiters.lineDelimiter()[0]);
+
             //对通道关闭进行监听
             channelFuture.channel().closeFuture().sync();
         } finally {
