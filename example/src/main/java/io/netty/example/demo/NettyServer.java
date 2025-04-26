@@ -38,7 +38,7 @@ public class NettyServer {
                     // 添加字符串解码器,将ByteBuf转换为字符串
                     //pipeline.addLast(new StringDecoder(Charset.forName("UTF-8")));
                     //pipeline.addLast(new StringEncoder(Charset.forName("UTF-8")));
-                    ch.pipeline().addLast(new DelimiterBasedFrameDecoder(Integer. MAX_VALUE, Delimiters.lineDelimiter()[0]));
+                    //ch.pipeline().addLast(new DelimiterBasedFrameDecoder(Integer. MAX_VALUE, Delimiters.lineDelimiter()[0]));
                     ch.pipeline().addLast(new NettyServerHandler());
                 }
             });

@@ -1,6 +1,8 @@
 package io.netty.example.demo;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -32,8 +34,9 @@ public class NettyClient {
                             ChannelPipeline pipeline = ch.pipeline();
                             ch.pipeline().addLast(new DelimiterBasedFrameDecoder(Integer.MAX_VALUE, Delimiters.lineDelimiter()[0]));
                             //pipeline.addLast(new StringDecoder());
+                            //第一种
                             // 添加字符串编码器
-                            pipeline.addLast(new StringEncoder());
+                            //pipeline.addLast(new StringEncoder());
                             // 添加自定义的处理器
                             pipeline.addLast(new NettyClientHandler());
                         }
@@ -45,10 +48,15 @@ public class NettyClient {
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8080).sync();
 
             String person="张三\r\n";
+            //第一种
+            //channelFuture.channel().write(person);
+            //channelFuture.channel().write(person);
+            //channelFuture.channel().writeAndFlush(Delimiters.lineDelimiter()[0]);
 
-            channelFuture.channel().write(person);
-            channelFuture.channel().write(person);
-            channelFuture.channel().writeAndFlush(Delimiters.lineDelimiter()[0]);
+            ByteBuf buf = PooledByteBufAllocator. DEFAULT.buffer();
+            buf.writeBytes(person.getBytes(Charset.defaultCharset()));
+            channelFuture.channel().write(buf);
+
 
             //对通道关闭进行监听
             channelFuture.channel().closeFuture().sync();
