@@ -24,8 +24,7 @@ public class NettyServer {
                     // 指定使用NioServerSocketChannel接受进来的连接
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 128)
-                    .childOption(ChannelOption.TCP_NODELAY, true)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true)
+                    .option(ChannelOption.TCP_NODELAY, true)
                     .option(ChannelOption.SO_KEEPALIVE, true)
                     //4.boss负责处理连接worker(child)负责处理读写,决定了worker(child)能执行哪些操作(handler)
                     .childHandler(new ChannelInitializer<NioServerSocketChannel>() {
@@ -34,8 +33,8 @@ public class NettyServer {
                     //5.channel代表和客户端进行数据读写的通道 Init.ializer 初始化,负责添加别的handler
                     ChannelPipeline pipeline = ch.pipeline().addLast(new LoggingHandler());
                     // 添加字符串解码器,将ByteBuf转换为字符串
-                    pipeline.addLast(new StringDecoder(Charset.forName("UTF-8")));
-                    pipeline.addLast(new StringEncoder(Charset.forName("UTF-8")));
+                    //pipeline.addLast(new StringDecoder(Charset.forName("UTF-8")));
+                    //pipeline.addLast(new StringEncoder(Charset.forName("UTF-8")));
                     ch.pipeline().addLast(new NettyServerHandler());
                 }
             });
