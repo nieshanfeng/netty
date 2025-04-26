@@ -12,12 +12,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 打印从客户端读取到的字符串消息
-        //System.out.println("Server received: " + msg);
+        System.out.println("Server received: " + msg);
        // ctx.writeAndFlush("Server received: " + msg);
-        System.out.println("开始读取数据");
-        if(msg instanceof ByteBuf){
+        //System.out.println("开始读取数据");
+        /*if(msg instanceof ByteBuf){
 
-        }
+        }*/
     }
 
     @Override
