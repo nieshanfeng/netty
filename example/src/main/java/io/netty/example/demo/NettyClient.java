@@ -13,6 +13,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 
 public class NettyClient {
@@ -34,11 +35,10 @@ public class NettyClient {
                             ChannelPipeline pipeline = ch.pipeline();
                             ch.pipeline().addLast(new DelimiterBasedFrameDecoder(Integer.MAX_VALUE, Delimiters.lineDelimiter()[0]));
                             //pipeline.addLast(new StringDecoder());
-                            //第一种
-                            // 添加字符串编码器
-                            //pipeline.addLast(new StringEncoder());
                             // 添加自定义的处理器
                             pipeline.addLast(new NettyClientHandler());
+                            //第1种 添加字符串编码器
+                           // pipeline.addLast(new StringEncoder());
                         }
                     });
 
@@ -48,15 +48,16 @@ public class NettyClient {
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8080).sync();
 
             String person="张三\r\n";
-            //第一种
-            //channelFuture.channel().write(person);
-            //channelFuture.channel().write(person);
-            //channelFuture.channel().writeAndFlush(Delimiters.lineDelimiter()[0]);
+            //channelFuture.channel().writeAndFlush(person.getBytes(StandardCharsets.UTF_8));
+            //第1种
+            //channelFuture.channel().writeAndFlush(person);
 
+
+            //第2种
             ByteBuf buf = PooledByteBufAllocator. DEFAULT.buffer();
-            buf.writeBytes(person.getBytes(Charset.defaultCharset()));
-            channelFuture.channel().write(buf);
-
+            buf.writeBytes(person.getBytes(StandardCharsets.UTF_8));
+            channelFuture.channel().writeAndFlush(buf);
+            //channelFuture.channel().writeAndFlush(Delimiters.lineDelimiter()[0]);
 
             //对通道关闭进行监听
             channelFuture.channel().closeFuture().sync();

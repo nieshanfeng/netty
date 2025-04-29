@@ -36,9 +36,10 @@ public class NettyServer {
                     //5.channel代表和客户端进行数据读写的通道 Init.ializer 初始化,负责添加别的handler
                     //ChannelPipeline pipeline = ch.pipeline().addLast(new LoggingHandler());
                     // 添加字符串解码器,将ByteBuf转换为字符串
-                    //pipeline.addLast(new StringDecoder(Charset.forName("UTF-8")));
-                    //pipeline.addLast(new StringEncoder(Charset.forName("UTF-8")));
-                    //ch.pipeline().addLast(new DelimiterBasedFrameDecoder(Integer. MAX_VALUE, Delimiters.lineDelimiter()[0]));
+
+                    //ch.pipeline().addLast(new StringEncoder(Charset.forName("UTF-8")));
+                    ch.pipeline().addLast(new DelimiterBasedFrameDecoder(Integer. MAX_VALUE, Delimiters.lineDelimiter()[0]));
+                    //ch.pipeline().addLast(new StringDecoder(Charset.forName("UTF-8")));
                     ch.pipeline().addLast(new NettyServerHandler());
                 }
             });
