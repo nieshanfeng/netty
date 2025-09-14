@@ -11,6 +11,7 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.util.AttributeKey;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -34,11 +35,11 @@ public class NettyClient {
                             // 获取通道的管道
                             ChannelPipeline pipeline = ch.pipeline();
                             ch.pipeline().addLast(new DelimiterBasedFrameDecoder(Integer.MAX_VALUE, Delimiters.lineDelimiter()[0]));
-                            //pipeline.addLast(new StringDecoder());
+                            pipeline.addLast(new StringDecoder());
                             // 添加自定义的处理器
                             pipeline.addLast(new NettyClientHandler());
                             //第1种 添加字符串编码器
-                           // pipeline.addLast(new StringEncoder());
+                            pipeline.addLast(new StringEncoder());
                         }
                     });
 
@@ -50,17 +51,19 @@ public class NettyClient {
             String person="张三\r\n";
             //channelFuture.channel().writeAndFlush(person.getBytes(StandardCharsets.UTF_8));
             //第1种
-            //channelFuture.channel().writeAndFlush(person);
+            channelFuture.channel().writeAndFlush(person);
 
 
             //第2种
-            ByteBuf buf = PooledByteBufAllocator. DEFAULT.buffer();
+          /*  ByteBuf buf = PooledByteBufAllocator. DEFAULT.buffer();
             buf.writeBytes(person.getBytes(StandardCharsets.UTF_8));
-            channelFuture.channel().writeAndFlush(buf);
+            channelFuture.channel().writeAndFlush(buf);*/
             //channelFuture.channel().writeAndFlush(Delimiters.lineDelimiter()[0]);
 
             //对通道关闭进行监听
             channelFuture.channel().closeFuture().sync();
+           Object result= channelFuture.channel().attr(AttributeKey.valueOf("ChannelKey")).get();
+            System.out.println(result);
         } finally {
             // 优雅地关闭事件循环组
             group.shutdownGracefully();

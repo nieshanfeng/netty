@@ -21,6 +21,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             ByteBuf req = (ByteBuf)msg;
             String content = req.toString(Charset.defaultCharset());
             System.out.println(content);
+
+            ctx.channel().writeAndFlush("李四\r\n");
         }
     }
 
