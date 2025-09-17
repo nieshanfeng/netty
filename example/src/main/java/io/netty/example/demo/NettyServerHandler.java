@@ -16,7 +16,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         // 打印从客户端读取到的字符串消息
         //System.out.println("Server received: " + msg);
         //ctx.writeAndFlush("Server received: " + msg);
-        System.out.println("开始读取数据");
+        System.out.println("开始读取数据============");
         if(msg instanceof ByteBuf){
             ByteBuf req = (ByteBuf)msg;
             String content = req.toString(Charset.defaultCharset());
@@ -38,7 +38,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         // 打印异常堆栈信息
         cause.printStackTrace();
-
         // 关闭通道
         ctx.close();
     }
