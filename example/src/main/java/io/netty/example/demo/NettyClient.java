@@ -40,6 +40,9 @@ public class NettyClient {
                             pipeline.addLast(new NettyClientHandler());
                             //第1种 添加字符串编码器
                             pipeline.addLast(new StringEncoder());
+
+                            //第2种 添加字符串编码器
+                            //pipeline.addLast(new StringEncoder());
                         }
                     });
 
@@ -49,13 +52,12 @@ public class NettyClient {
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8080).sync();
 
             String person="张三\r\n";
-            //channelFuture.channel().writeAndFlush(person.getBytes(StandardCharsets.UTF_8));
             //第1种
             channelFuture.channel().writeAndFlush(person);
 
 
-            //第2种
-          /*  ByteBuf buf = PooledByteBufAllocator. DEFAULT.buffer();
+            //第2种 PooledByteBufAllocator
+          /*  ByteBuf buf = PooledByteBufAllocator.DEFAULT.buffer();
             buf.writeBytes(person.getBytes(StandardCharsets.UTF_8));
             channelFuture.channel().writeAndFlush(buf);*/
             //channelFuture.channel().writeAndFlush(Delimiters.lineDelimiter()[0]);
